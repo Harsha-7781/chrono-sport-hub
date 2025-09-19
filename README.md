@@ -1,73 +1,252 @@
-# Welcome to your Lovable project
+# Sports Scheduler Web Application
 
-## Project info
+A comprehensive web application for managing sports sessions and activities with role-based access control.
 
-**URL**: https://lovable.dev/projects/14afc9bc-51f6-4bbf-a816-c73857d75fa3
+## 🚀 Features
 
-## How can I edit this code?
+### Authentication & Authorization
+- **Email/password authentication** with JWT tokens
+- **Role-based access control** (Admin & Player roles)
+- Secure user registration and login
 
-There are several ways of editing your application.
+### Admin Features
+- **Sports Management**: Create, edit, and delete sports categories
+- **Session Oversight**: View all sessions and manage activities
+- **Reports & Analytics**: Track user engagement and session statistics
+- **User Management**: Monitor player activities
 
-**Use Lovable**
+### Player Features
+- **Session Discovery**: Browse and join available sports sessions
+- **Session Creation**: Create new sessions for other players to join
+- **Session Management**: Leave sessions with cancellation reasons
+- **Personal Dashboard**: Track created and joined sessions
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/14afc9bc-51f6-4bbf-a816-c73857d75fa3) and start prompting.
+### Core Functionality
+- **Smart Session Logic**: Prevents joining past sessions
+- **Capacity Management**: Shows available slots and joined players
+- **Real-time Updates**: Live session status and player counts
+- **Responsive Design**: Dark theme with gold/purple/blue accents
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Technology Stack
 
-**Use your preferred IDE**
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **shadcn/ui** components
+- **React Query** for state management
+- **React Router** for navigation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Backend (To be implemented)
+- **Node.js** with Express
+- **TypeScript** for type safety
+- **Prisma ORM** for database operations
+- **PostgreSQL** database
+- **bcrypt** for password hashing
+- **JWT** for authentication tokens
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🎨 Design System
 
-Follow these steps:
+### Color Palette
+- **Background**: #121212 / #1A1A1A
+- **Gold Accent**: #DAA520
+- **Deep Purple**: #673AB7
+- **Electric Blue**: #1E90FF / #004D61
+- **Text**: #F0F0F0
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Button Design
+- **Default**: Purple/Blue with gold text
+- **Hover**: Lighter/darker shades
+- **Active**: Gold/blue borders with opacity overlays
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚦 Getting Started
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Prerequisites
+- Node.js 18+ and npm
+- PostgreSQL database (for backend)
+- Git
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone <your-repository-url>
+cd sports-scheduler
 ```
 
-**Edit a file directly in GitHub**
+2. **Install frontend dependencies**
+```bash
+npm install
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+3. **Set up environment variables**
+```bash
+cp .env.example .env
+# Edit .env with your database and JWT configuration
+```
 
-**Use GitHub Codespaces**
+4. **Run database migrations** (when backend is implemented)
+```bash
+npm run db:migrate
+npm run db:seed
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+5. **Start development servers**
+```bash
+# Frontend (Vite dev server)
+npm run dev
 
-## What technologies are used for this project?
+# Backend (when implemented)
+npm run server:dev
+```
 
-This project is built with:
+### Docker Support
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+# Start the application with Docker Compose
+docker-compose up -d
 
-## How can I deploy this project?
+# Stop the application
+docker-compose down
+```
 
-Simply open [Lovable](https://lovable.dev/projects/14afc9bc-51f6-4bbf-a816-c73857d75fa3) and click on Share -> Publish.
+## 📝 Available Scripts
 
-## Can I connect a custom domain to my Lovable project?
+### Frontend
+- `npm run dev` - Start Vite development server
+- `npm run build` - Build production bundle
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-Yes, you can!
+### Backend (To be implemented)
+- `npm run server:dev` - Start Express server with nodemon
+- `npm run server:build` - Build TypeScript to JavaScript
+- `npm run server:start` - Start production server
+- `npm run db:migrate` - Run database migrations
+- `npm run db:seed` - Seed database with sample data
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔐 Demo Accounts
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+For development and testing:
+
+**Admin Account**
+- Email: `admin@sports.com`
+- Password: `admin123`
+
+**Player Account**
+- Email: `player@sports.com`  
+- Password: `player123`
+
+## 📊 Database Schema
+
+### Users Table
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email VARCHAR UNIQUE NOT NULL,
+  password_hash VARCHAR NOT NULL,
+  name VARCHAR NOT NULL,
+  role VARCHAR CHECK (role IN ('admin', 'player')),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Sports Table
+```sql
+CREATE TABLE sports (
+  id UUID PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  description TEXT,
+  max_players INTEGER NOT NULL,
+  created_by UUID REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Sessions Table
+```sql
+CREATE TABLE sessions (
+  id UUID PRIMARY KEY,
+  sport_id UUID REFERENCES sports(id),
+  title VARCHAR NOT NULL,
+  description TEXT,
+  date DATE NOT NULL,
+  time TIME NOT NULL,
+  duration INTEGER NOT NULL,
+  max_players INTEGER NOT NULL,
+  location VARCHAR NOT NULL,
+  created_by UUID REFERENCES users(id),
+  status VARCHAR DEFAULT 'upcoming',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### Session Players Table
+```sql
+CREATE TABLE session_players (
+  id UUID PRIMARY KEY,
+  session_id UUID REFERENCES sessions(id),
+  user_id UUID REFERENCES users(id),
+  joined_at TIMESTAMP DEFAULT NOW(),
+  status VARCHAR DEFAULT 'joined',
+  cancellation_reason TEXT,
+  UNIQUE(session_id, user_id)
+);
+```
+
+## 🔒 Security Features
+
+- **Password hashing** with bcrypt
+- **JWT token authentication**
+- **Role-based route protection**
+- **Input validation** and sanitization
+- **SQL injection prevention** with Prisma
+- **CORS configuration**
+- **Rate limiting** (to be implemented)
+
+## 📱 Responsive Design
+
+- **Mobile-first** approach
+- **Responsive breakpoints**: sm, md, lg, xl
+- **Touch-friendly** interface elements
+- **Dark theme** optimized for all devices
+
+## 🧪 Testing Strategy
+
+- **Unit tests** with Jest
+- **Integration tests** for API endpoints
+- **End-to-end tests** with Playwright
+- **Component tests** with React Testing Library
+
+## 🚀 Deployment
+
+### Frontend Deployment
+```bash
+npm run build
+# Deploy dist/ folder to your hosting provider
+```
+
+### Backend Deployment
+```bash
+npm run server:build
+# Deploy to your server with Docker or Node.js
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **shadcn/ui** for the beautiful component library
+- **Tailwind CSS** for the utility-first CSS framework
+- **Lucide React** for the icon system
+- **React Query** for data fetching and caching

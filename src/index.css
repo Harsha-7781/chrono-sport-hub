@@ -2,41 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Sports Scheduler Dark Theme Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark Theme Colors */
+    --background: 0 0% 7.1%; /* #121212 */
+    --background-secondary: 0 0% 10.2%; /* #1A1A1A */
+    --foreground: 0 0% 94.1%; /* #F0F0F0 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card System */
+    --card: 0 0% 10.2%; /* #1A1A1A */
+    --card-foreground: 0 0% 94.1%; /* #F0F0F0 */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Popover */
+    --popover: 0 0% 10.2%;
+    --popover-foreground: 0 0% 94.1%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand Colors */
+    --primary: 258 100% 48%; /* Deep Purple #673AB7 */
+    --primary-foreground: 43 74% 49%; /* Gold #DAA520 */
+    --primary-hover: 258 100% 55%;
+    
+    --secondary: 203 100% 56%; /* Electric Blue #1E90FF */
+    --secondary-foreground: 43 74% 49%; /* Gold text */
+    --secondary-hover: 203 100% 50%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Accent Gold */
+    --accent: 43 74% 49%; /* Gold #DAA520 */
+    --accent-foreground: 0 0% 7.1%; /* Dark background */
+    --accent-hover: 43 74% 55%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Utility Colors */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 94.1%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 43 74% 49%; /* Gold ring */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+    --gradient-gold: linear-gradient(135deg, hsl(var(--accent)), hsl(43 74% 60%));
+    --gradient-dark: linear-gradient(180deg, hsl(var(--background)), hsl(var(--background-secondary)));
+
+    /* Shadows */
+    --shadow-glow: 0 0 20px hsl(var(--accent) / 0.3);
+    --shadow-primary: 0 10px 30px -10px hsl(var(--primary) / 0.4);
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +120,47 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background-secondary));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--accent) / 0.5);
+  }
+}
+
+@layer components {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
+  }
+
+  .transition-smooth {
+    transition: var(--transition);
   }
 }
